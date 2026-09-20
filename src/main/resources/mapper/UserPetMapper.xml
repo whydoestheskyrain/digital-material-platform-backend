@@ -1,0 +1,22 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.trade.virtual_trade.mapper.UserPetMapper">
+
+    <insert id="insert">
+        INSERT INTO user_pet (user_id, skin_id, pos_x, pos_y, create_time)
+        VALUES (#{userId}, #{skinId}, #{posX}, #{posY}, NOW())
+    </insert>
+
+    <select id="selectByUserId" resultType="com.trade.virtual_trade.entity.UserPet">
+        SELECT * FROM user_pet WHERE user_id = #{userId}
+    </select>
+
+    <update id="update">
+        UPDATE user_pet SET skin_id = #{skinId}, pos_x = #{posX}, pos_y = #{posY}
+        WHERE user_id = #{userId}
+    </update>
+
+    <delete id="deleteByUserId">
+        DELETE FROM user_pet WHERE user_id = #{userId}
+    </delete>
+</mapper>

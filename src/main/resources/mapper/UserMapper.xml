@@ -1,0 +1,94 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="com.trade.virtual_trade.mapper.UserMapper">
+
+    <!-- 修改手机号 -->
+    <update id="updatePhone">
+        UPDATE user
+        SET phone = #{phone}, update_time = NOW()
+        WHERE id = #{userId}
+    </update>
+
+    <!-- 根据手机号查询用户（校验手机号是否已被占用） -->
+    <select id="selectByPhone" resultType="com.trade.virtual_trade.entity.User">
+        SELECT * FROM user WHERE phone = #{phone}
+    </select>
+
+    <!-- 注册新增用户 -->
+    <insert id="add">
+        INSERT INTO user(username,password,nickname,phone)
+        VALUES(#{username},#{password},#{nickname},#{phone})
+    </insert>
+
+    <!-- 修改昵称 -->
+    <update id="updateNickname">
+        UPDATE user SET nickname = #{nickname} WHERE id = #{id}
+    </update>
+
+    <!-- 根据用户名查询 -->
+    <select id="findByUsername" resultType="com.trade.virtual_trade.entity.User">
+        select * from user where username=#{username}
+    </select>
+
+    <!-- 登录查询 -->
+    <select id="login" resultType="com.trade.virtual_trade.entity.User">
+        SELECT * FROM user
+        WHERE TRIM(username) = TRIM(#{username})
+          AND TRIM(password) = TRIM(#{password})
+    </select>
+
+    <select id="selectAll" resultType="com.trade.virtual_trade.entity.User">
+        select * from user
+    </select>
+
+    <select id="selectById" parameterType="int" resultType="com.trade.virtual_trade.entity.User">
+        select * from user where id = #{id}
+    </select>
+
+    <insert id="insert">
+        insert into user(username,password,phone,nickname)
+        values(#{username},#{password},#{phone},#{nickname})
+    </insert>
+
+    <update id="update">
+        update user
+        set username=#{username},password=#{password},phone=#{phone},nickname=#{nickname}, avatar = #{avatar}
+        where id=#{id}
+    </update>
+
+    <delete id="deleteById" parameterType="int">
+        delete from user where id=#{id}
+    </delete>
+
+    <select id="findPage" resultType="com.trade.virtual_trade.entity.User">
+        SELECT * FROM user LIMIT #{offset}, #{size}
+    </select>
+
+    <update id="addBalance">
+        UPDATE user SET balance = balance + #{amount} WHERE id = #{userId}
+    </update>
+
+    <update id="freezeBalance">
+        UPDATE user SET balance = balance - #{amount}, frozen_balance = frozen_balance + #{amount}
+        WHERE id = #{userId} AND balance >= #{amount}
+    </update>
+
+    <update id="unfreezeToBalance">
+        UPDATE user SET frozen_balance = frozen_balance - #{amount}, balance = balance + #{amount}
+        WHERE id = #{userId} AND frozen_balance >= #{amount}
+    </update>
+
+    <update id="transferFromFrozenToSeller">
+        UPDATE user 
+        SET frozen_balance = frozen_balance - #{amount}
+        WHERE id = #{buyerId} AND frozen_balance >= #{amount}
+    </update>
+
+    <select id="selectBalanceById" resultType="com.trade.virtual_trade.entity.User">
+        SELECT balance, frozen_balance FROM user WHERE id = #{userId}
+    </select>
+
+
+</mapper>

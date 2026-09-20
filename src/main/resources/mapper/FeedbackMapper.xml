@@ -1,0 +1,33 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.trade.virtual_trade.mapper.FeedbackMapper">
+
+    <insert id="insert">
+        INSERT INTO feedback (user_id, title, content, status, create_time)
+        VALUES (#{userId}, #{title}, #{content}, #{status}, NOW())
+    </insert>
+
+    <select id="selectByUserId" resultType="com.trade.virtual_trade.entity.Feedback">
+        SELECT * FROM feedback WHERE user_id = #{userId} ORDER BY create_time DESC
+    </select>
+
+    <select id="selectAll" resultType="com.trade.virtual_trade.entity.Feedback">
+        SELECT * FROM feedback ORDER BY create_time DESC
+    </select>
+
+    <select id="selectById" resultType="com.trade.virtual_trade.entity.Feedback">
+        SELECT * FROM feedback WHERE id = #{id}
+    </select>
+
+    <update id="updateReply">
+        UPDATE feedback SET reply = #{reply}, status = 1, reply_time = #{replyTime} WHERE id = #{id}
+    </update>
+
+    <update id="updateStatus">
+        UPDATE feedback SET status = #{status} WHERE id = #{id}
+    </update>
+
+    <delete id="deleteById">
+        DELETE FROM feedback WHERE id = #{id}
+    </delete>
+</mapper>

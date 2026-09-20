@@ -1,0 +1,79 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="com.trade.virtual_trade.mapper.ProductMapper">
+
+    <!-- 审核商品（必须加！）-->
+    <update id="audit">
+        UPDATE product
+        SET status = #{status}, update_time = NOW()
+        WHERE id = #{id}
+    </update>
+
+    <!-- 全部商品 -->
+    <select id="findAll" resultType="Product">
+        SELECT * FROM product ORDER BY create_time DESC
+    </select>
+
+    <!-- 根据ID查询 -->
+    <select id="findById" resultType="Product">
+        SELECT * FROM product WHERE id = #{id}
+    </select>
+
+    <!-- 新增商品（字段全部匹配实体类） -->
+    <insert id="add">
+        INSERT INTO product (seller_id, game_type_id, game_type, title, game_server,
+                             role_level, price, description, detail_desc, detail_images,
+                             game_account, game_password, bind_info, status, reject_reason,
+                             create_time, update_time, image_url)
+        VALUES (#{sellerId}, #{gameTypeId}, IFNULL(#{gameType},''), #{title}, IFNULL(#{gameServer},''),
+                #{roleLevel}, #{price}, IFNULL(#{description},''), IFNULL(#{detailDesc},''), IFNULL(#{detailImages},''),
+                IFNULL(#{gameAccount},''), IFNULL(#{gamePassword},''), IFNULL(#{bindInfo},''), 0, '', NOW(), NOW(), #{imageUrl})
+    </insert>
+
+    <!-- 修改商品（全部字段） -->
+    <update id="update">
+        UPDATE product
+        SET title = #{title}, game_type_id = #{gameTypeId}, game_type = #{gameType}, game_server = #{gameServer},
+            role_level = #{roleLevel}, price = #{price}, description = #{description},
+            detail_desc = #{detailDesc}, detail_images = #{detailImages},
+            game_account = #{gameAccount}, game_password = #{gamePassword},
+            bind_info = #{bindInfo}, update_time = NOW()
+        WHERE id = #{id}
+    </update>
+
+    <!-- 删除商品 -->
+    <delete id="delete">
+        DELETE FROM product WHERE id = #{id}
+    </delete>
+
+    <!-- 分页 -->
+    <select id="findPage" resultType="Product">
+        SELECT * FROM product
+        ORDER BY create_time DESC
+            LIMIT #{start}, #{size}
+    </select>
+
+    <!-- 按状态查询（审核列表） -->
+    <select id="listByStatus" resultType="Product">
+        SELECT * FROM product
+        WHERE status = #{status}
+        ORDER BY create_time DESC
+    </select>
+
+    <!-- 我的商品 -->
+    <select id="myList" resultType="Product">
+        SELECT * FROM product
+        WHERE seller_id = #{sellerId}
+        ORDER BY create_time DESC
+    </select>
+    <update id="updateById">
+        UPDATE product
+        SET status = #{status}
+        WHERE id = #{id}
+    </update>
+
+
+
+</mapper>

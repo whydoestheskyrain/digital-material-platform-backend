@@ -1,0 +1,43 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.trade.virtual_trade.mapper.PetSkinMapper">
+
+    <insert id="insert">
+        INSERT INTO pet_skin (skin_name, idle_ani, click_ani, main_img, is_default, status, create_time)
+        VALUES (#{skinName}, #{idleAni}, #{clickAni}, #{mainImg}, #{isDefault}, #{status}, NOW())
+    </insert>
+
+    <select id="selectAll" resultType="com.trade.virtual_trade.entity.PetSkin">
+        SELECT * FROM pet_skin ORDER BY id
+    </select>
+
+    <select id="selectByStatus" resultType="com.trade.virtual_trade.entity.PetSkin">
+        SELECT * FROM pet_skin WHERE status = #{status} ORDER BY id
+    </select>
+
+    <select id="selectById" resultType="com.trade.virtual_trade.entity.PetSkin">
+        SELECT * FROM pet_skin WHERE id = #{id}
+    </select>
+
+    <select id="selectDefault" resultType="com.trade.virtual_trade.entity.PetSkin">
+        SELECT * FROM pet_skin WHERE is_default = 1 AND status = 1 LIMIT 1
+    </select>
+
+    <update id="update">
+        UPDATE pet_skin SET skin_name = #{skinName}, idle_ani = #{idleAni}, 
+        click_ani = #{clickAni}, main_img = #{mainImg}, status = #{status} 
+        WHERE id = #{id}
+    </update>
+
+    <update id="updateDefault">
+        UPDATE pet_skin SET is_default = 1 WHERE id = #{id}
+    </update>
+
+    <update id="clearDefault">
+        UPDATE pet_skin SET is_default = 0
+    </update>
+
+    <delete id="deleteById">
+        DELETE FROM pet_skin WHERE id = #{id}
+    </delete>
+</mapper>
